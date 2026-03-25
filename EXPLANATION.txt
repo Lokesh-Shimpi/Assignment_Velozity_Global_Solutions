@@ -1,0 +1,10 @@
+EXPLANATION.txt
+
+1. The hardest problem solved:
+The most significant challenge was implementing a truly tamper-evident audit trail with automated chain verification. Balancing the need for cryptographic immutability with high-performance querying required a careful implementation of SHA-256 chaining. To ensure the integrity of this chain, we had to implement PostgreSQL-level append-only triggers to block any UPDATE or DELETE operations directly at the database engine level, bypassing application logic. This creates a provably untamperable record of all critical tenant actions.
+
+2. How tenant isolation was ensured strictly at the query level:
+Tenant isolation is enforced by the `authMiddleware`, which extracts and validates the API key before any business logic is executed. Upon validation, it attaches a `tenantContext` object containing the `tenantId` to the Express Request object. Every single Prisma query across the application is explicitly designed to include this `tenantId` in its `where` clause. This ensures that even if a developer forgets to filter by a resource ID, the database query will never return data belonging to a different tenant, effectively creating a virtual private database for each client within a single shared PostgreSQL instance.
+
+3. One thing we would do differently if we had more time:
+If we had more time, we would implement PostgreSQL Row Level Security (RLS). While code-level isolation is effective, RLS adds an absolute safety net by enforcing visibility rules at the database session level. By setting the `tenant_id` in a database local variable for each transaction, we could ensure that no query—even raw SQL or misconfigured Prisma calls—could ever touch data outside the active tenant's scope. This would provide the ultimate "Defense in Depth" strategy for a production-grade B2B SaaS.
