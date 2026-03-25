@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production
+dist/
+build/
+
+# Misc
+.DS_Store
+*.pem
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Prisma
+/prisma/generated-client
+/prisma/*.db
+/prisma/*.db-journal
+
+# Compiled JS
+**/*.js
+!**/*.config.js
+!**/*.routes.js
+!**/*.controller.js
+# NOTE: The above might be problematic if they use JS for their app logic.
+# Looking at their context, they use TypeScript.
+
+# TypeScript
+*.tsbuildinfo
